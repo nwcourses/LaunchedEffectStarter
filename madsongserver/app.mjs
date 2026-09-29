@@ -14,6 +14,17 @@ app.use(express.urlencoded({extended: false}));
 // Load the database.
 const db = new Database("wadsongs.db");
 
+// Return all songs 
+app.get('/allSongs', (req, res) => {
+    try {
+        const stmt = db.prepare('SELECT * FROM wadsongs ORDER BY id');
+        const results = stmt.all();
+        res.json(results);
+    } catch(error) {
+        res.status(500).json({error: error});
+    }
+});
+
 // Search by artist
 app.get('/artist/:artist', (req, res) => {
     try {
